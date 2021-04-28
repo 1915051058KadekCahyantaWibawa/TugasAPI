@@ -1,3 +1,6 @@
+/**
+ * Halaman untuk melakuakn edit data blog dan menghapus data blog
+ */
 import 'package:flutter/material.dart';
 import 'BlogsModel.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +14,8 @@ class EditDelete extends StatefulWidget {
   _EditDeleteState createState() => _EditDeleteState();
 }
 
-class _EditDeleteState extends State<EditDelete> {
+class _EditDeleteState extends State<EditDelete> {  
+  // Input text controller untuk siklus hidup text input judul dan isi
   final isiController = TextEditingController();
   final judulController = TextEditingController();
 
@@ -23,6 +27,10 @@ class _EditDeleteState extends State<EditDelete> {
     isiController.text = widget.blog.isi;
   }
 
+  /**
+   * Method untuk melakukan HTTP request PATCH ke REST API untuk mengupdate data blog
+   * yang dipilih oleh user
+   */
   Future updateBlog() async {
     Map<String, String> body = {
       'judul': judulController.text,
@@ -35,6 +43,10 @@ class _EditDeleteState extends State<EditDelete> {
     }
   }
 
+  /**
+   * Method untuk melakukan HTTP request DELETE ke REST API untuk mengupdate data blog
+   * yang dipilih oleh user
+   */
   Future deleteBlog() async {
     final response = await http.delete(Uri.http(Config.apiUrl, "/${widget.blog.id}"));
     if (response.statusCode == 200) {
@@ -42,6 +54,9 @@ class _EditDeleteState extends State<EditDelete> {
     }
   }
 
+
+  // Modul Widget untuk form input yang terdiri dari input field
+  // judul, isi dan tombol Update
   List<Widget> formEditBlog() {
     return <Widget>[
       Padding(
@@ -63,7 +78,7 @@ class _EditDeleteState extends State<EditDelete> {
             children: [
               ElevatedButton(
                   onPressed: () {
-                    updateBlog();
+                    updateBlog(); // Ketika tombol update ditekan, update data dengan updateBlog()
                   },
                   child: Text('Update')),
             ],
@@ -72,6 +87,9 @@ class _EditDeleteState extends State<EditDelete> {
     ];
   }
 
+  /**
+   * Program utama dari screen Edit/Delee
+   */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +99,7 @@ class _EditDeleteState extends State<EditDelete> {
             IconButton(
                 icon: Icon(Icons.delete, color: Colors.red),
                 onPressed: () {
-                  deleteBlog();
+                  deleteBlog(); // Ketika tombol delete ditekan, panggil method deleteBlog untuk menghapus data
                 })
           ],
         ),

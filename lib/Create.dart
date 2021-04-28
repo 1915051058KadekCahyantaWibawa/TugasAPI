@@ -1,3 +1,6 @@
+/**
+ * Page untuk menambahkan data baru
+ */
 import 'package:flutter/material.dart';
 import 'Config.dart';
 import 'package:http/http.dart' as http;
@@ -11,9 +14,11 @@ class CreateBlog extends StatefulWidget {
 }
 
 class _CreateBlogState extends State<CreateBlog> {
+  // Input text controller untuk siklus hidup text input judul dan isi
   final isiController = TextEditingController();
   final judulController = TextEditingController();
 
+  // Method untuk melakukan http request POST ke endpoint create pada REST API
   Future simpanBlog() async {
     Map<String, String> body = {
       'judul': judulController.text,
@@ -25,6 +30,8 @@ class _CreateBlogState extends State<CreateBlog> {
     }
   }
 
+  // Modul Widget untuk form input yang terdiri dari input field
+  // judul, isi dan tombol Simpan
   List<Widget> formTambahBlog() {
     return <Widget>[
       Padding(
@@ -51,6 +58,7 @@ class _CreateBlogState extends State<CreateBlog> {
     ];
   }
 
+  // Bagian program utama dari halaman Create
   @override
   Widget build(BuildContext context) {
     return Scaffold(

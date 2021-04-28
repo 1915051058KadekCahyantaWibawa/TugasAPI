@@ -1,3 +1,6 @@
+/**
+ * File Model ini berfungsi untuk serialisasi response dari API
+ */
 class BlogsModel {
   int id;
   String judul;
