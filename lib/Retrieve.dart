@@ -1,3 +1,6 @@
+/**
+ * Halaman utama dari aplikasi yang menampilkan list blog
+ */
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'BlogsModel.dart';
@@ -14,14 +17,20 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // variable untuk menampung list data blog yang bertipe Future->List->BlogsModel
   Future<List<BlogsModel>> blogsData;
 
   @override
   // ignore: must_call_super
   void initState() {
-    blogsData = getBlogs();
+    blogsData = getBlogs(); // Inisiasi variabel blogsData ketika initState
   }
 
+
+  /**
+   * Method untuk melakukan HTTP Request GET untuk mendapatkan daftar list blog dari REST API
+   * response diserialisasi dengan BlogModel
+   */
   Future<List<BlogsModel>> getBlogs() async {
     final response = await http.get(Uri.http(Config.apiUrl, '/'));
     if (response.statusCode == 200) {
@@ -46,7 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
+                    // Ketika salah satu item ListView ditap (disklik) tampilkan halaman EditDelete.dart
+                    // passing parameter blog untuk mengirim data ke halaman EditDelete.dart
+                    // agar digunakan saat melakukan edit data pada input textfield
                     builder: (context) => EditDelete(blog: data[index])),
+                    
               );
             },
           );
@@ -54,6 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
         itemCount: data.length);
   }
 
+  // App bar dari halaman Retrieve yang berisikan tombol Tambah dan Refresh data
   List<Widget> tombolMenu() {
     return <Widget>[
       // Tombol Refresh Data
@@ -61,7 +75,9 @@ class _MyHomePageState extends State<MyHomePage> {
           icon: Icon(Icons.refresh, color: Colors.white),
           onPressed: () {
             setState(() {
+              // Get data ulang ketika tombol refresh diklik
               blogsData = getBlogs();
+
             });
           }),
 
@@ -69,6 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
       IconButton(
           icon: Icon(Icons.add, color: Colors.white),
           onPressed: () {
+            // Buka halaman CreateBlog.dar apabila tombol tambah diklik
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => CreateBlog()),
@@ -77,6 +94,11 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 
+  /**
+   * Bagian utama dari screen retrieve, yang terdiri dari appbar dan body.
+   * body dibungkus dengan FutureBuilder karena saat diinisiasi Melakuka
+   * request ke REST API secara async,
+   */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
